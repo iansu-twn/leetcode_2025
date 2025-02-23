@@ -3,6 +3,11 @@ from customer
 where referee_id != 2 
 or referee_id is null
 
+-- use coalesce
+select name
+from customer
+where coalesce(referee_id, 0) != 2
+
 def find_customer_referee(customer: pd.DataFrame) -> pd.DataFrame:
     -- method 1
     return customer[
