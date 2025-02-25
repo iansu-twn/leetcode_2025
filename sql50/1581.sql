@@ -22,3 +22,10 @@ def find_customers(visits: pd.DataFrame, transactions: pd.DataFrame) -> pd.DataF
     -- avoid creating a intermediate dataframe (more direct way)
     df = df[df["transaction_id"].isna()]["customer_id"]
     return df.value_counts().reset_index(name="count_no_trans")
+
+    -- method 3
+    df = df[df["transaction_id"].isna()].groupby(
+        "customer_id", as_index=False).agg(
+            count_no_trans=("visit_id", "nunique")
+        )
+    return df
