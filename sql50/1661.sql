@@ -10,6 +10,7 @@ and b.activity_type = 'end'
 group by a.machine_id
 
 def get_average_time(activity: pd.DataFrame) -> pd.DataFrame:
+    -- method 1
     df = activity.merge(
         activity,
         how="inner",
@@ -28,8 +29,21 @@ def get_average_time(activity: pd.DataFrame) -> pd.DataFrame:
         "machine_id",
         as_index=False
     ).agg({
-        "dif": np.average
+        "dif": np.average -- or can use "dif": "mean"
     }).round(3).rename(
         columns={"dif": "processing_time"}
     )
+    return df
+
+    -- nethod 2
+    -- using pivot table
+    df = activity.pivot(
+        index=["machine_id", "process_id"],
+        columns="activity_type",
+        values="timestamp"
+    )
+    df["processing_time"] = df["end"]-df["start"]
+    df = df.groupby(
+        "machine_id",
+    ).processing_time.mean().round(3).reset_index()
     return df
