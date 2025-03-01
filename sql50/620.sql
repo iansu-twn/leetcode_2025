@@ -9,6 +9,7 @@ order by rating desc
 def not_boring_movies(cinema: pd.DataFrame) -> pd.DataFrame:
     df = cinema[
         (cinema["id"] % 2 == 1) &
-        (~cinema["description"].str.contains("boring"))
+        -- (~cinema["description"].str.contains("boring"))
+        (~cinema["description"] != 'boring')
     ]
     return df.sort_values(by="rating", ascending=False)
