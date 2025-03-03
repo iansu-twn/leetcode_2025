@@ -11,7 +11,15 @@ def user_activity(activity: pd.DataFrame) -> pd.DataFrame:
         (activity["activity_date"] > datetime(2019, 7, 27)-timedelta(days=30)) &
         (activity["activity_date"] <= datetime(2019, 7, 27))
     ]
+    -- method 1
     df = df.groupby("activity_date").agg(
         active_users=("user_id", "nunique")
     ).reset_index().rename(columns={"activity_date": "day"})
+    -- method 2
+    df = df.groupby("activity_date").user_id.nunique().reset_index().rename(
+        columns={
+            "activity_date": "day",
+            "user_id": "active_users"
+        }
+    )
     return df
