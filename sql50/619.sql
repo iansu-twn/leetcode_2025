@@ -15,4 +15,4 @@ def biggest_single_number(my_numbers: pd.DataFrame) -> pd.DataFrame:
     ]
     if df.empty:
         return pd.DataFrame(data=[{"num": np.nan}])
-    return df[["num"]].sort_values("num", ascending=False)
+    return df.sort_values("num", ascending=False)[["num"]].head(1)
