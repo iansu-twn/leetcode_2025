@@ -8,6 +8,14 @@ join (
 on e.employee_id = t.id
 order by t.id
 
+select mgr.employee_id, mgr.name, count(e.employee_id) reports_count,
+round(avg(e.age)) average_age
+from employees e
+join employees mgr
+on mgr.employee_id = e.reports_to
+group by mgr.employee_id
+order by mgr.employee_id
+
 def count_employees(employees: pd.DataFrame) -> pd.DataFrame:
     df = employees.groupby("reports_to").agg(
         reports_count=("reports_to", "count"),
