@@ -6,6 +6,7 @@ group by sell_date
 order by sell_date
 
 def categorize_products(activities: pd.DataFrame) -> pd.DataFrame:
+    -- method 1
     activities.drop_duplicates(inplace=True)
     activities.sort_values(["sell_date", "product"], ascending=True, inplace=True)
 
@@ -21,4 +22,11 @@ def categorize_products(activities: pd.DataFrame) -> pd.DataFrame:
         how="inner",
         on=["sell_date"]
     )
+    return activities
+
+    -- method 2
+    activities = activities.groupby("sell_date")["product"].agg([
+        ("num_sold", "nunique"),
+        ("products", lambda t: ','.join(sorted(t.unique())))
+    ]).reset_index()
     return activities
