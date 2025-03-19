@@ -1,3 +1,4 @@
+-- method 1 join table
 with first_day as (
     select player_id, min(event_date) event_date
     from activity
@@ -8,6 +9,16 @@ from first_day fd
 left join activity a
 on fd.player_id = a.player_id
 and fd.event_date = date_sub(a.event_date, interval 1 day)
+
+-- method 2 use where
+select
+round(count(distinct player_id) / (select count(distinct player_id) from activity), 2) fraction
+from activity
+where (player_id, date_sub(event_date, interval 1 day)) in (
+    select player_id, min(event_date)
+    from activity
+    group by player_id
+)
 
 import pandas as pd
 import numpy as np
