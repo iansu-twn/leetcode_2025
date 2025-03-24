@@ -14,3 +14,9 @@ def exchange_seats(seat: pd.DataFrame) -> pd.DataFrame:
         lambda x: x+1 if (x%2 and x != big) else (x-1 if x%2==0 else x)
     )
     return seat.sort_values("id")
+
+    -- method 2
+    return seat.assign(
+        student = np.where(seat.id%2 & (seat.id == len(seat)), seat.student,
+        np.where(seat.id%2, seat.student.shift(-1), seat.student.shift(1)))
+    )
